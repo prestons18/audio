@@ -1,5 +1,5 @@
 {
-  "name": "preston-audio",
+  "name": "@prestonarnold/audio",
   "version": "0.0.1",
   "description": "Simple multi-purpose audio library for my Radio Software.",
   "main": "dist/index.js",
