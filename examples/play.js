@@ -1,4 +1,4 @@
-import { audioInstance } from "../src/audio"; // Change to package
+import { audioInstance } from "@prestonarnold/audio";
 
 const audioArray = [
     "/path/to/audio.mp3",
