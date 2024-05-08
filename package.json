@@ -1,0 +1,20 @@
+{
+  "name": "preston-audio",
+  "version": "0.0.1",
+  "description": "Simple multi-purpose audio library for my Radio Software.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Preston Arnold <Arnold Development>",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "@types/play-sound": "^1.1.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "play-sound": "^1.1.6"
+  }
+}
