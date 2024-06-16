@@ -13,6 +13,7 @@
 - Resuming Audio
 - on/off events
 - Checking current playing time
+- Getting all audio devices
 
 ## 🛠️ Installation Steps:
 
