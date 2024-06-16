@@ -1,10 +1,8 @@
 import { exec, execSync, ChildProcess } from 'child_process';
 import { EventEmitter } from 'events';
+import si from "systeminformation"
 
-/**
- * Represents an audio player that uses ffplay for playback.
- */
-export class AudioPlayer {
+export class AudioManager {
     private audioQueue: string[] = [];
     private isPlaying = false;
     private playInstance: ChildProcess | null = null;
@@ -15,7 +13,7 @@ export class AudioPlayer {
     private eventEmitter: EventEmitter = new EventEmitter();
 
     /**
-     * Constructs an instance of AudioPlayer.
+     * Constructs an instance of AudioManager.
      */
     constructor() {}
 
@@ -156,6 +154,29 @@ export class AudioPlayer {
     }
 
     /**
+     * Retrieves all available audio devices.
+     * @returns {string[]} Array of audio device information strings.
+     */
+    public async audioDevices(): Promise<string[]> {
+        try {
+            if (this.getPlatform() === 'win32') {
+                const data = await si.audio() as unknown as string[]
+
+                console.log(data)
+
+                return data;
+            } else {
+                const command = 'aplay -L';
+                const output = execSync(command, { encoding: 'utf8' });
+                return output.split('\n').filter(line => line.trim() !== '');
+            }
+        } catch (error) {
+            console.error("Error retrieving audio devices:", error);
+            return [];
+        }
+    }
+
+    /**
      * Controls object with methods to play, pause, and resume playback.
      */
     public controls = {
@@ -261,9 +282,9 @@ export class AudioPlayer {
 }
 
 /**
- * Factory function to create an instance of AudioPlayer.
- * @returns {AudioPlayer} An instance of AudioPlayer.
+ * Factory function to create an instance of AudioManager.
+ * @returns {AudioManager} An instance of AudioManager.
  */
-export const audioInstance = (): AudioPlayer => {
-    return new AudioPlayer();
+export const audioInstance = (): AudioManager => {
+    return new AudioManager();
 };

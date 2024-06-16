@@ -1,4 +1,4 @@
-import { audioInstance } from "../src/audio/index"
+const { audioInstance } = require("../dist/index")
 
 const audioArray = [
     "/path/to/audio.mp3",
