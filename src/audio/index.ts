@@ -1,9 +1,9 @@
-import { exec } from 'child_process';
+import { exec, ChildProcess } from 'child_process';
 
 class AudioPlayer {
     private audioQueue: string[] = [];
     private isPlaying = false;
-    private playInstance: any = null;
+    private playInstance: ChildProcess | null = null;
 
     controls = {
         play: (callback?: () => void) => {
@@ -16,16 +16,24 @@ class AudioPlayer {
         },
         pause: () => {
             if (this.playInstance) {
-                this.playInstance.kill('SIGSTOP');
+                if (process.platform === 'win32') {
+                    exec(`taskkill /PID ${this.playInstance.pid} /T /F`);
+                } else {
+                    this.playInstance.kill('SIGSTOP');
+                }
             }
         },
         resume: () => {
             if (this.playInstance) {
-                exec('kill -CONT $(pgrep play)', (err, stdout, stderr) => {
-                    if (err) {
-                        console.error("Error resuming playback:", err);
-                    }
-                });
+                if (process.platform === 'win32') {
+                    console.error("Resume not supported on Windows");
+                } else {
+                    exec('kill -CONT $(pgrep ffplay)', (err, stdout, stderr) => {
+                        if (err) {
+                            console.error("Error resuming playback:", err);
+                        }
+                    });
+                }
             }
         }
     };
@@ -37,7 +45,7 @@ class AudioPlayer {
     private playNextInQueue(): void {
         if (!this.isPlaying && this.audioQueue.length > 0) {
             const filePath = this.audioQueue[0];
-            this.playInstance = exec(`play ${filePath}`, (err, stdout, stderr) => {
+            this.playInstance = exec(`ffplay -nodisp -autoexit ${filePath}`, (err, stdout, stderr) => {
                 if (err) {
                     console.error("Error playing audio:", err);
                 }
