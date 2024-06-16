@@ -5,6 +5,14 @@ class AudioPlayer {
     private isPlaying = false;
     private playInstance: ChildProcess | null = null;
 
+    constructor(audioArray: string[]) {
+        this.audioQueue = audioArray;
+    }
+
+    private getPlatform(): 'win32' | 'unix' {
+        return process.platform === 'win32' ? 'win32' : 'unix';
+    }
+
     controls = {
         play: (callback?: () => void) => {
             if (!this.isPlaying && this.audioQueue.length > 0) {
@@ -16,7 +24,7 @@ class AudioPlayer {
         },
         pause: () => {
             if (this.playInstance) {
-                if (process.platform === 'win32') {
+                if (this.getPlatform() === 'win32') {
                     exec(`taskkill /PID ${this.playInstance.pid} /T /F`);
                 } else {
                     this.playInstance.kill('SIGSTOP');
@@ -25,7 +33,7 @@ class AudioPlayer {
         },
         resume: () => {
             if (this.playInstance) {
-                if (process.platform === 'win32') {
+                if (this.getPlatform() === 'win32') {
                     console.error("Resume not supported on Windows");
                 } else {
                     exec('kill -CONT $(pgrep ffplay)', (err, stdout, stderr) => {
@@ -37,10 +45,6 @@ class AudioPlayer {
             }
         }
     };
-
-    constructor(audioArray: string[]) {
-        this.audioQueue = audioArray;
-    }
 
     private playNextInQueue(): void {
         if (!this.isPlaying && this.audioQueue.length > 0) {
