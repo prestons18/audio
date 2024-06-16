@@ -11,6 +11,8 @@
 - Playing Audio
 - Pausing Audio
 - Resuming Audio
+- on/off events
+- Checking current playing time
 
 ## 🛠️ Installation Steps:
 
