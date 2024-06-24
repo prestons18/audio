@@ -280,11 +280,3 @@ export class AudioManager {
         this.eventEmitter.off(event, listener);
     }
 }
-
-/**
- * Factory function to create an instance of AudioManager.
- * @returns {AudioManager} An instance of AudioManager.
- */
-export const audioInstance = (): AudioManager => {
-    return new AudioManager();
-};
