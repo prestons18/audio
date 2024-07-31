@@ -31,7 +31,7 @@
 
 Technologies used in the project:
 
-- SoX
+- FFMpeg
 - Typescript
 
 ## 💖 Like my work?
